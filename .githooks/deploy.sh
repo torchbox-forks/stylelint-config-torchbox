@@ -8,6 +8,13 @@
 # cloning or adding a new hook.
 # No output is good output.
 
+# Only deploy in this package's own clone. Installed as a dependency (npm runs
+# `prepare` in a temporary clone with no .git, or inside another project's
+# repository), there is nothing to deploy, and that repository's hooks are
+# not ours to replace.
+TOPLEVEL=`git rev-parse --show-toplevel 2>/dev/null` || exit 0
+[ "$TOPLEVEL" = "`pwd -P`" ] || exit 0
+
 BASE=`git rev-parse --git-dir`
 ROOT=`git rev-parse --show-toplevel`
 HOOK_DIR=.githooks
